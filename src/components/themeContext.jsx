@@ -1,6 +1,13 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
-const themes = ["Klasik", "Aktif", "Anadolu", "Minimalist", "Nostalji", "Üretken"];
+const themes = [
+  "Klasik",
+  "Aktif",
+  "Anadolu",
+  "Minimalist",
+  "Nostalji",
+  "Üretken",
+];
 
 const ThemeContext = createContext();
 
@@ -17,19 +24,36 @@ export const ThemeProvider = ({ children, userData }) => {
       .replace(/ç/g, "c")
       .replace(/ğ/g, "g");
 
-  const decideTheme = (userData) => {
-    if (!userData || !userData.login) return "Klasik";
+  const decideTheme = (user) => {
+    if (!user || !user.login) return "Klasik";
 
-    const location = userData.location?.toLowerCase() || "";
-    const repoCount = userData.public_repos || 0;
-    const followers = userData.followers || 0;
+    const location = user.location?.toLowerCase() || "";
+    const repoCount = user.public_repos || 0;
+    const followers = user.followers || 0;
+    const lastActive = new Date(user.updated_at);
+    const now = new Date();
+    const monthsSinceLastActivity =
+      (now - lastActive) / (1000 * 60 * 60 * 24 * 30);
 
+    // Az üretim varsa önce zaman kontrol edilir
+    if (repoCount < 5) {
+      if (monthsSinceLastActivity > 6) return "Nostalji";
+      return "Minimalist";
+    }
+
+    // Çok üretken
     if (followers > 100 || repoCount > 50) return "Üretken";
-    if (location.includes("istanbul") || location.includes("türkiye")) return "Anadolu";
-    if (followers < 10 && repoCount < 5) return "Nostalji";
-    if (repoCount >= 5 && repoCount <= 20) return "Minimalist";
 
-    return "Aktif";
+    // Orta üretim ve güncel
+    if (repoCount >= 5 && repoCount <= 20 && monthsSinceLastActivity <= 6) {
+      return "Aktif";
+    }
+
+    // Lokasyon bazlı
+    if (location.includes("istanbul") || location.includes("türkiye"))
+      return "Anadolu";
+
+    return "Klasik"; // fallback
   };
 
   useEffect(() => {
