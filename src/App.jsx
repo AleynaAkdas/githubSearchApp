@@ -1,19 +1,16 @@
 import { useEffect, useState, useRef } from "react";
 import "./App.css";
+import { useTheme } from "./components/themeContext"; // Tema eklendi
 
 export default function App() {
   const [inputValue, setInputValue] = useState("");
   const [username, setUsername] = useState("");
   const [userData, setUserData] = useState(null);
-  const [theme, setTheme] = useState("Başlangıç");
   const [showThemes, setShowThemes] = useState(false);
   const [loading, setLoading] = useState(false);
   const dropdownRef = useRef(null);
 
-  useEffect(() => {
-    document.body.className = theme;
-    localStorage.theme = theme;
-  }, [theme]);
+  const { theme, setTheme, themes } = useTheme(); //  useTheme ile veriler alındı
 
   useEffect(() => {
     if (username) {
@@ -29,6 +26,24 @@ export default function App() {
       }, 800);
     }
   }, [username]);
+
+  // Kullanıcı verisine göre otomatik tema seçimi
+  useEffect(() => {
+    if (userData && userData.login) {
+      const location = userData.location?.toLowerCase() || "";
+      const repoCount = userData.public_repos || 0;
+      const followers = userData.followers || 0;
+
+      let autoTheme = "Aktif";
+
+      if (followers > 100 || repoCount > 50) autoTheme = "Üretken";
+      else if (location.includes("istanbul") || location.includes("türkiye")) autoTheme = "Anadolu";
+      else if (followers < 10 && repoCount < 5) autoTheme = "Nostalji";
+      else if (repoCount >= 5 && repoCount <= 20) autoTheme = "Minimalist";
+
+      setTheme(autoTheme);
+    }
+  }, [userData]);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -75,14 +90,7 @@ export default function App() {
 
         {showThemes && (
           <div className="theme-dropdown">
-            {[
-              "Başlangıç",
-              "Aktif",
-              "Anadolu",
-              "Minimalist",
-              "Nostalji",
-              "Üretken",
-            ].map((t) => (
+            {themes.map((t) => (
               <div
                 key={t}
                 className="theme-option"
@@ -97,6 +105,7 @@ export default function App() {
           </div>
         )}
       </div>
+
       {loading && (
         <div className="loading-spinner">
           <div className="spinner">
@@ -104,6 +113,7 @@ export default function App() {
           </div>
         </div>
       )}
+
       {userData && userData.login && !loading && (
         <div
           className={`user-info ${!showThemes ? "clickable" : "disabled"}`}

@@ -1,0 +1,38 @@
+:root {
+  --bg-color: linear-gradient(135deg, #0b1a2e, #3b1f1f);
+  --text-color: #fdf4ff;
+  --font-main: "Inter", "Segoe UI", sans-serif;
+
+  --container-bg: #3b2f4fdd;
+  --container-shadow: 0 12px 32px #00000099;
+  --container-radius: 18px;
+
+  --heading-color: #ffffff;
+
+  --input-bg: #1c1c3b;
+  --input-color: #fdf4ff;
+  --input-border: #c47f3f;
+  --input-border-focus: #000000;
+  --input-shadow-focus: #c47f3f;
+
+  --button-bg: linear-gradient(to right, #c47f3f, #eab308);
+  --button-text: #1c1c3b;
+  --button-shadow: #eab308;
+
+  --user-card-bg: #1c1c3b;
+  --user-border: #eab308;
+  --user-name-color: #fdf4ff;
+  --user-username-color: #fcd34d;
+  --user-location-color: #fde68a;
+
+  --stat-bg: #3b2f4fdd;
+  --stat-hover-bg: #312e81;
+  --stat-text: #fdf4ff;
+
+  --not-found-color: #7e2a2a;
+
+  --dropdown-bg: #1c1c3b;
+  --dropdown-border: #eab308;
+  --dropdown-hover-bg: linear-gradient(to right, #c47f3f, #eab308);
+  --dropdown-hover-text: #1c1c3b;
+}
