@@ -47,7 +47,8 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .container {
@@ -286,9 +287,11 @@ body {
 
 @media (max-width: 820px) {
   body {
+    overflow: auto;
     min-height: 100dvh;
   }
   .container {
+    max-height: 100%;
     max-width: 80%;
     margin: 0 16px;
     padding: 24px;
